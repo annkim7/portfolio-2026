@@ -15,13 +15,37 @@ import {
 } from "@/lib/motion";
 import { AnimatePresence, motion, useAnimate, useTransform } from "motion/react";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
+
+const NARROW_QUERY = "(max-width: 767px)";
+const readyQueries = new Set<string>();
+
+function useMediaQuery(query: string) {
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      const media = window.matchMedia(query);
+      const notify = () => {
+        readyQueries.add(query);
+        onStoreChange();
+      };
+      media.addEventListener("change", notify);
+      const frame = window.requestAnimationFrame(notify);
+      return () => {
+        media.removeEventListener("change", notify);
+        window.cancelAnimationFrame(frame);
+      };
+    },
+    () => readyQueries.has(query) && window.matchMedia(query).matches,
+    () => false,
+  );
+}
 
 type SlideObjectProps = {
   slide: Slide;
   direction: SlideDirection;
   pointer: PointerParallax;
   priority?: boolean;
+  isAnimating?: boolean;
   nudge?: { dir: SlideDirection; id: number } | null;
 };
 
@@ -30,9 +54,20 @@ export function SlideObject({
   direction,
   pointer,
   priority = false,
+  isAnimating = false,
   nudge,
 }: SlideObjectProps) {
   const reduced = useReducedMotion();
+  const narrow = useMediaQuery(NARROW_QUERY);
+  const variants = useMemo(() => {
+    if (reduced) return reducedObjectVariants;
+    if (!narrow) return objectVariants;
+    return {
+      enter: (direction: number) => ({ ...objectVariants.enter(direction), filter: "blur(0px)" }),
+      center: { ...objectVariants.center, filter: "blur(0px)" },
+      exit: (direction: number) => ({ ...objectVariants.exit(direction), filter: "blur(0px)" }),
+    };
+  }, [narrow, reduced]);
   const [scope, animate] = useAnimate();
   const x = useTransform(pointer.x, (value) => `calc(-50% + ${value * PARALLAX.object.x}px)`);
   const y = useTransform(pointer.y, (value) => `calc(-50% + ${value * PARALLAX.object.y}px)`);
@@ -78,11 +113,12 @@ export function SlideObject({
           <motion.div
             key={slide.id}
             custom={direction}
-            variants={reduced ? reducedObjectVariants : objectVariants}
+            variants={variants}
             initial="enter"
             animate="center"
             exit="exit"
             className="absolute inset-0"
+            style={{ willChange: isAnimating ? "transform, opacity, filter" : "auto" }}
           >
             <motion.div
               className="h-full w-full"
@@ -100,7 +136,7 @@ export function SlideObject({
                 width={slide.image.width}
                 height={slide.image.height}
                 priority={priority}
-                sizes="31vw"
+                sizes="(max-width: 767px) 72vw, (max-width: 1023px) 42vw, 31vw"
                 className="h-full w-full object-contain"
                 style={{ filter: "drop-shadow(0 30px 40px rgba(0,0,0,0.12))" }}
               />

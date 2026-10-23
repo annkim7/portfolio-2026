@@ -14,6 +14,7 @@ import {
 } from "@/hooks/useSlideNavigation";
 import { DURATION, EASE_OUT, TRANSITION_LOCK_MS } from "@/lib/motion";
 import { motion, useAnimation } from "motion/react";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Nudge = { dir: SlideDirection; id: number };
@@ -53,6 +54,32 @@ function BackgroundShift({
   );
 }
 
+const imageSizes = "(max-width: 767px) 72vw, (max-width: 1023px) 42vw, 31vw";
+
+function AdjacentSlides({ index }: { index: number }) {
+  const neighbors = [index - 1, index + 1].filter(
+    (item) => item >= 0 && item < slides.length,
+  );
+
+  return (
+    <div aria-hidden className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
+      {neighbors.map((item) => {
+        const neighbor = slides[item];
+        return (
+          <Image
+            key={neighbor.id}
+            src={neighbor.image.src}
+            alt=""
+            width={neighbor.image.width}
+            height={neighbor.image.height}
+            sizes={imageSizes}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export function Stage() {
   const [nudge, setNudge] = useState<Nudge | null>(null);
   const nudgeId = useRef(0);
@@ -61,7 +88,7 @@ export function Stage() {
     setNudge({ dir: direction, id: nudgeId.current });
   }, []);
 
-  const { index, direction, goTo } = useSlideNavigation({
+  const { index, direction, goTo, isAnimating } = useSlideNavigation({
     count: slides.length,
     duration: TRANSITION_LOCK_MS,
     ids: slides.map((slide) => slide.id),
@@ -84,11 +111,13 @@ export function Stage() {
       </p>
       <BackgroundShift index={index} direction={direction} />
       <Header />
+      <AdjacentSlides index={index} />
       <SlideObject
         slide={slide}
         direction={direction}
         pointer={pointer}
         priority={index === 0}
+        isAnimating={isAnimating}
         nudge={nudge}
       />
       <SlideTitle slide={slide} index={index} direction={direction} pointer={pointer} />

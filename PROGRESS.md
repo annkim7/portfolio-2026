@@ -14,3 +14,4 @@
 | 2026-10-23 | feature-accessibility | 8 | merged | reduced-motion 크로스페이드, carousel aria, 포커스 링 |
 | 2026-10-23 | feature-fix-reduced-motion | 8 | merged | reduced-motion 하이드레이션 불일치와 lint 수정 |
 | 2026-10-23 | feature-frame-mode | 8.3 | merged | NEXT_PUBLIC_FRAME_MODE, cqw/cqh 카드 프레임 |
+| 2026-10-23 | feature-performance | 9 | merged | 인접 이미지 프리로드, 모바일 blur 제거, will-change |
