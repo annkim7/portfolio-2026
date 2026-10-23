@@ -13,6 +13,13 @@ export const INVERSE_STAGGER = 0.06;
 export const LABEL_DELAY = 0.55;
 export const LABEL_STAGGER = 0.05;
 export const RUBBER_BAND_PX = 12;
+export const RUBBER_BAND_DURATION = 0.5;
+export const HEADER_INTRO = { duration: 0.6, delay: 0.8 };
+export const INVERSE_SCALE_DURATION = 0.45;
+export const INVERSE_TEXT_DURATION = 0.4;
+export const INVERSE_TEXT_DELAY = 0.18;
+export const INVERSE_TEXT_EXIT = 0.3;
+export const BACKGROUND_SHIFT_TIMES = [0, 0.4, 1] as const;
 
 export const SETTLE_SPRING = { type: "spring" as const, stiffness: 120, damping: 18 };
 export const DOT_SPRING = { type: "spring" as const, stiffness: 400, damping: 32 };

@@ -15,3 +15,4 @@
 | 2026-10-23 | feature-fix-reduced-motion | 8 | merged | reduced-motion 하이드레이션 불일치와 lint 수정 |
 | 2026-10-23 | feature-frame-mode | 8.3 | merged | NEXT_PUBLIC_FRAME_MODE, cqw/cqh 카드 프레임 |
 | 2026-10-23 | feature-performance | 9 | merged | 인접 이미지 프리로드, 모바일 blur 제거, will-change |
+| 2026-10-23 | feature-fix-motion-constants | 10 | merged | 모션 상수를 motion.ts로 모음, QA 후 릴리스 준비 |

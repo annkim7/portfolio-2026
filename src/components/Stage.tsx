@@ -12,7 +12,7 @@ import {
   useSlideNavigation,
   type SlideDirection,
 } from "@/hooks/useSlideNavigation";
-import { DURATION, EASE_OUT, TRANSITION_LOCK_MS } from "@/lib/motion";
+import { BACKGROUND_SHIFT_TIMES, DURATION, EASE_OUT, TRANSITION_LOCK_MS } from "@/lib/motion";
 import { motion, useAnimation } from "motion/react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -40,7 +40,7 @@ function BackgroundShift({
 
     void controls.start({
       backgroundPosition: ["50% 100%", `${50 + direction * 3}% 100%`, "50% 100%"],
-      transition: { duration: DURATION.enter, ease: EASE_OUT, times: [0, 0.4, 1] },
+      transition: { duration: DURATION.enter, ease: EASE_OUT, times: [...BACKGROUND_SHIFT_TIMES] },
     });
   }, [controls, direction, index, reduced]);
 

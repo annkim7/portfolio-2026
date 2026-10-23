@@ -8,6 +8,10 @@ import {
   EASE_IN,
   EASE_OUT,
   INVERSE_DELAY,
+  INVERSE_SCALE_DURATION,
+  INVERSE_TEXT_DELAY,
+  INVERSE_TEXT_DURATION,
+  INVERSE_TEXT_EXIT,
   INVERSE_STAGGER,
   LABEL_DELAY,
   LABEL_STAGGER,
@@ -45,12 +49,12 @@ function InverseLine({ text, delay }: { text: string; delay: number }) {
         center: (direction: number) => ({
           scaleX: 1,
           originX: direction > 0 ? 0 : 1,
-          transition: { duration: 0.45, ease: EASE_OUT, delay },
+          transition: { duration: INVERSE_SCALE_DURATION, ease: EASE_OUT, delay },
         }),
         exit: (direction: number) => ({
           scaleX: 0,
           originX: direction > 0 ? 1 : 0,
-          transition: { duration: 0.45, ease: EASE_IN },
+          transition: { duration: INVERSE_SCALE_DURATION, ease: EASE_IN },
         }),
       }}
     >
@@ -60,11 +64,15 @@ function InverseLine({ text, delay }: { text: string; delay: number }) {
           enter: { y: "100%" },
           center: {
             y: "0%",
-            transition: { duration: 0.4, ease: EASE_OUT, delay: delay + 0.18 },
+            transition: {
+              duration: INVERSE_TEXT_DURATION,
+              ease: EASE_OUT,
+              delay: delay + INVERSE_TEXT_DELAY,
+            },
           },
           exit: {
             y: "-110%",
-            transition: { duration: 0.3, ease: EASE_IN },
+            transition: { duration: INVERSE_TEXT_EXIT, ease: EASE_IN },
           },
         }}
       >

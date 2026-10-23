@@ -10,6 +10,7 @@ import {
   objectVariants,
   PARALLAX,
   reducedObjectVariants,
+  RUBBER_BAND_DURATION,
   RUBBER_BAND_PX,
   SETTLE_SPRING,
 } from "@/lib/motion";
@@ -87,7 +88,7 @@ export function SlideObject({
     void animate(
       scope.current,
       { y: [0, -RUBBER_BAND_PX * nudge.dir, 0] },
-      { duration: 0.5, ease: EASE_OUT },
+      { duration: RUBBER_BAND_DURATION, ease: EASE_OUT },
     );
   }, [animate, nudge, reduced, scope]);
 
