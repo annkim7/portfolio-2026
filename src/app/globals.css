@@ -1,1 +1,61 @@
 @import "tailwindcss";
+
+:root {
+  --bg: #ececec;
+  --bg-light: #f3f3f3;
+  --bg-dark: #e2e2e2;
+  --fg: #0b0b0b;
+  --fg-inverse: #f4f4f4;
+  --frame: #969da3;
+
+  --fs-logo: clamp(13px, 1.05vw, 17px);
+  --fs-nav: clamp(9px, 0.7vw, 11px);
+  --fs-index: clamp(9px, 0.7vw, 11px);
+  --fs-title: clamp(22px, 2.1vw, 36px);
+  --fs-sub: clamp(15px, 1.4vw, 24px);
+  --fs-label: clamp(10px, 0.85vw, 13px);
+
+  --pad-x: 7vw;
+  --pad-x-right: 5.8vw;
+  --header-top: 9.5vh;
+  --icon-search-right: 15.5vw;
+  --icon-cart-right: 6.5vw;
+  --product-left: 12.5vw;
+  --nav-gap: 8.4vw;
+  --index-bottom: 25vh;
+  --title-bottom: 10.5vh;
+  --dots-bottom: 11.5vh;
+  --label-top-bottom: 21vh;
+  --label-bottom: 10.5vh;
+  --object-w: clamp(220px, 31vw, 640px);
+  --object-cy: 52vh;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-light: var(--bg-light);
+  --color-bg-dark: var(--bg-dark);
+  --color-fg: var(--fg);
+  --color-fg-inverse: var(--fg-inverse);
+  --color-frame: var(--frame);
+  --font-display: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  color: var(--fg);
+  font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(120% 90% at 50% 100%, var(--bg-light) 0%, transparent 60%),
+    linear-gradient(200deg, var(--bg-dark) 0%, var(--bg) 55%);
+  touch-action: none;
+}
