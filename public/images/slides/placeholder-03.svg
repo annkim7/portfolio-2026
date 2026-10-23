@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" fill="none">
+  <path fill="rgba(100,100,100,0.28)" d="M610 200c180 10 310 140 330 300 20 180-80 340-230 400-160 60-340 20-450-120-100-130-110-320-20-460 80-120 210-140 370-120Z"/>
+  <circle cx="600" cy="500" r="46" fill="none" stroke="rgba(60,60,60,0.4)" stroke-width="16"/>
+  <circle cx="600" cy="640" r="110" fill="rgba(210,210,210,0.55)"/>
+  <circle cx="600" cy="560" r="70" fill="#C6A15B"/>
+</svg>
