@@ -4,6 +4,7 @@ export const EASE_INOUT = [0.76, 0, 0.24, 1] as const;
 
 export const DURATION = { enter: 1.0, exit: 0.6, text: 0.8, textExit: 0.5 };
 export const TRANSITION_LOCK_MS = 1100;
+export const REDUCED_DURATION = 0.3;
 
 export const OBJECT_ENTER_DELAY = 0.15;
 export const TITLE_DELAY = { index: 0.3, title: 0.35, subtitle: 0.42 };
@@ -52,6 +53,32 @@ export const objectVariants = {
     filter: "blur(6px)",
     transition: { duration: DURATION.exit, ease: EASE_IN },
   }),
+};
+
+export const reducedObjectVariants = {
+  enter: { opacity: 0, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" },
+  center: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    rotate: 0,
+    filter: "blur(0px)",
+    transition: { duration: REDUCED_DURATION },
+  },
+  exit: {
+    opacity: 0,
+    y: 0,
+    scale: 1,
+    rotate: 0,
+    filter: "blur(0px)",
+    transition: { duration: REDUCED_DURATION },
+  },
+};
+
+export const reducedFadeVariants = {
+  enter: { opacity: 0, y: 0, scaleX: 1 },
+  center: { opacity: 1, y: 0, scaleX: 1, transition: { duration: REDUCED_DURATION } },
+  exit: { opacity: 0, y: 0, scaleX: 1, transition: { duration: REDUCED_DURATION } },
 };
 
 export function maskedLineVariants(delay: number) {

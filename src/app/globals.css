@@ -116,6 +116,11 @@ body {
   }
 }
 
+.stage :where(a, button):focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
+}
+
 @media (height < 500px) {
   :root {
     --object-w: min(31vw, 60vh);

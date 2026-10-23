@@ -1,5 +1,7 @@
 "use client";
 
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { REDUCED_DURATION } from "@/lib/motion";
 import { motion } from "motion/react";
 import { Menu, Search, ShoppingCart, X } from "lucide-react";
 import { useState } from "react";
@@ -11,13 +13,17 @@ const controlClass =
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const reduced = useReducedMotion();
 
   return (
     <motion.header
       className="pointer-events-none absolute inset-0 z-20"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.8 }}
+      transition={{
+        duration: reduced ? REDUCED_DURATION : 0.6,
+        delay: reduced ? 0 : 0.8,
+      }}
     >
       <p className="absolute top-[var(--header-top)] left-[var(--pad-x)] m-0 -translate-y-1/2 text-[length:var(--fs-logo)] font-bold tracking-[0.02em]">
         DD

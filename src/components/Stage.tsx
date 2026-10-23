@@ -7,6 +7,7 @@ import { SlideObject } from "@/components/SlideObject";
 import { SlideTitle } from "@/components/SlideTitle";
 import { slides } from "@/data/slides";
 import { usePointerParallax } from "@/hooks/usePointerParallax";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import {
   useSlideNavigation,
   type SlideDirection,
@@ -26,6 +27,7 @@ function BackgroundShift({
 }) {
   const controls = useAnimation();
   const first = useRef(true);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (first.current) {
@@ -33,11 +35,13 @@ function BackgroundShift({
       return;
     }
 
+    if (reduced) return;
+
     void controls.start({
       backgroundPosition: ["50% 100%", `${50 + direction * 3}% 100%`, "50% 100%"],
       transition: { duration: DURATION.enter, ease: EASE_OUT, times: [0, 0.4, 1] },
     });
-  }, [controls, direction, index]);
+  }, [controls, direction, index, reduced]);
 
   return (
     <motion.div
@@ -64,10 +68,20 @@ export function Stage() {
     onEdge,
   });
   const slide = slides[index];
-  const pointer = usePointerParallax();
+  const reduced = useReducedMotion();
+  const pointer = usePointerParallax(!reduced);
+  const announcement = `${index + 1} / ${slides.length}: ${slide.title.replace(/\s+\.\s*$/, "")} ${slide.subtitle}`;
 
   return (
-    <div className="stage fixed inset-0">
+    <div
+      className="stage fixed inset-0"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={announcement}
+    >
+      <p className="sr-only" aria-live="polite">
+        {announcement}
+      </p>
       <BackgroundShift index={index} direction={direction} />
       <Header />
       <SlideObject

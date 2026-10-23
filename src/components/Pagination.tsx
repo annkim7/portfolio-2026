@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { DOT_SPRING } from "@/lib/motion";
 import { motion } from "motion/react";
 
@@ -10,6 +11,8 @@ type PaginationProps = {
 };
 
 export function Pagination({ count, active, onSelect }: PaginationProps) {
+  const reduced = useReducedMotion();
+
   return (
     <div
       className="absolute bottom-[calc(var(--dots-bottom)-(24px-7px)/2)] left-1/2 flex -translate-x-1/2 items-center"
@@ -33,12 +36,19 @@ export function Pagination({ count, active, onSelect }: PaginationProps) {
               className="col-start-1 row-start-1 box-border h-[7px] w-[7px] rounded-full border-[1.25px] border-[var(--fg)]"
             />
             {selected ? (
-              <motion.span
-                layoutId="dot-active"
-                aria-hidden
-                className="col-start-1 row-start-1 h-[7px] w-[7px] rounded-full bg-[var(--fg)]"
-                transition={DOT_SPRING}
-              />
+              reduced ? (
+                <span
+                  aria-hidden
+                  className="col-start-1 row-start-1 h-[7px] w-[7px] rounded-full bg-[var(--fg)]"
+                />
+              ) : (
+                <motion.span
+                  layoutId="dot-active"
+                  aria-hidden
+                  className="col-start-1 row-start-1 h-[7px] w-[7px] rounded-full bg-[var(--fg)]"
+                  transition={DOT_SPRING}
+                />
+              )
             ) : null}
           </button>
         );

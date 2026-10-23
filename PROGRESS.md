@@ -11,3 +11,4 @@
 | 2026-10-23 | feature-transition-animation | 6 | merged | 레이어 시차, 마스크 리빌, 점 layoutId, 경계 고무줄 |
 | 2026-10-23 | feature-pointer-parallax | 7 | merged | 커서 깊이감, hover 없는 기기에서는 비활성 |
 | 2026-10-23 | feature-responsive-layout | 8 | merged | dvh, 태블릿·모바일 토큰, 햄버거 메뉴 |
+| 2026-10-23 | feature-accessibility | 8 | merged | reduced-motion 크로스페이드, carousel aria, 포커스 링 |

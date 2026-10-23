@@ -12,7 +12,9 @@ import {
   LABEL_DELAY,
   LABEL_STAGGER,
   PARALLAX,
+  reducedFadeVariants,
 } from "@/lib/motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { AnimatePresence, motion, useTransform } from "motion/react";
 
 type SideLabelsProps = {
@@ -22,6 +24,19 @@ type SideLabelsProps = {
 };
 
 function InverseLine({ text, delay }: { text: string; delay: number }) {
+  const reduced = useReducedMotion();
+
+  if (reduced) {
+    return (
+      <motion.span
+        className="inline-block bg-[var(--fg)] px-[3px] text-[length:var(--fs-label)] leading-[1.15] font-bold whitespace-nowrap text-[var(--fg-inverse)]"
+        variants={reducedFadeVariants}
+      >
+        {text}
+      </motion.span>
+    );
+  }
+
   return (
     <motion.span
       className="inline-block overflow-hidden bg-[var(--fg)] px-[3px]"

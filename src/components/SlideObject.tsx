@@ -3,11 +3,13 @@
 import type { Slide } from "@/data/slides";
 import type { SlideDirection } from "@/hooks/useSlideNavigation";
 import type { PointerParallax } from "@/hooks/usePointerParallax";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import {
   DURATION,
   EASE_OUT,
   objectVariants,
   PARALLAX,
+  reducedObjectVariants,
   RUBBER_BAND_PX,
   SETTLE_SPRING,
 } from "@/lib/motion";
@@ -30,6 +32,7 @@ export function SlideObject({
   priority = false,
   nudge,
 }: SlideObjectProps) {
+  const reduced = useReducedMotion();
   const [scope, animate] = useAnimate();
   const x = useTransform(pointer.x, (value) => `calc(-50% + ${value * PARALLAX.object.x}px)`);
   const y = useTransform(pointer.y, (value) => `calc(-50% + ${value * PARALLAX.object.y}px)`);
@@ -45,13 +48,13 @@ export function SlideObject({
   const rotateX = useTransform(pointer.y, (value) => value * -PARALLAX.object.rotate);
 
   useEffect(() => {
-    if (!nudge || !scope.current) return;
+    if (reduced || !nudge || !scope.current) return;
     void animate(
       scope.current,
       { y: [0, -RUBBER_BAND_PX * nudge.dir, 0] },
       { duration: 0.5, ease: EASE_OUT },
     );
-  }, [animate, nudge, scope]);
+  }, [animate, nudge, reduced, scope]);
 
   return (
     <div className="absolute top-[var(--object-cy)] left-1/2 aspect-square w-[var(--object-w)]">
@@ -75,7 +78,7 @@ export function SlideObject({
           <motion.div
             key={slide.id}
             custom={direction}
-            variants={objectVariants}
+            variants={reduced ? reducedObjectVariants : objectVariants}
             initial="enter"
             animate="center"
             exit="exit"
@@ -83,9 +86,13 @@ export function SlideObject({
           >
             <motion.div
               className="h-full w-full"
-              initial={{ rotate: -1.5 * direction }}
+              initial={reduced ? false : { rotate: -1.5 * direction }}
               animate={{ rotate: 0 }}
-              transition={{ ...SETTLE_SPRING, delay: DURATION.enter * 0.85 }}
+              transition={
+                reduced
+                  ? { duration: 0 }
+                  : { ...SETTLE_SPRING, delay: DURATION.enter * 0.85 }
+              }
             >
               <Image
                 src={slide.image.src}
