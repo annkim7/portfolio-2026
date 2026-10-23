@@ -3,21 +3,28 @@
 import { MaskedLine } from "@/components/MaskedLine";
 import type { Slide } from "@/data/slides";
 import type { SlideDirection } from "@/hooks/useSlideNavigation";
-import { TITLE_DELAY } from "@/lib/motion";
-import { AnimatePresence, motion } from "motion/react";
+import type { PointerParallax } from "@/hooks/usePointerParallax";
+import { PARALLAX, TITLE_DELAY } from "@/lib/motion";
+import { AnimatePresence, motion, useTransform } from "motion/react";
 
 type SlideTitleProps = {
   slide: Slide;
   index: number;
   direction: SlideDirection;
+  pointer: PointerParallax;
 };
 
-export function SlideTitle({ slide, index, direction }: SlideTitleProps) {
+export function SlideTitle({ slide, index, direction, pointer }: SlideTitleProps) {
   const number = String(index + 1).padStart(2, "0");
+  const x = useTransform(pointer.x, (value) => value * PARALLAX.title.x);
+  const y = useTransform(pointer.y, (value) => value * PARALLAX.title.y);
 
   return (
     <>
-      <div className="absolute bottom-[var(--index-bottom)] left-[var(--pad-x)] h-0">
+      <motion.div
+        className="absolute bottom-[var(--index-bottom)] left-[var(--pad-x)] h-0"
+        style={{ x, y }}
+      >
         <AnimatePresence custom={direction}>
           <motion.div
             key={slide.id}
@@ -32,8 +39,11 @@ export function SlideTitle({ slide, index, direction }: SlideTitleProps) {
             </p>
           </motion.div>
         </AnimatePresence>
-      </div>
-      <div className="absolute bottom-[var(--title-bottom)] left-[var(--pad-x)] h-0">
+      </motion.div>
+      <motion.div
+        className="absolute bottom-[var(--title-bottom)] left-[var(--pad-x)] h-0"
+        style={{ x, y }}
+      >
         <AnimatePresence custom={direction}>
           <motion.div
             key={slide.id}
@@ -51,7 +61,7 @@ export function SlideTitle({ slide, index, direction }: SlideTitleProps) {
             </p>
           </motion.div>
         </AnimatePresence>
-      </div>
+      </motion.div>
     </>
   );
 }

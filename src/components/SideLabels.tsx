@@ -3,6 +3,7 @@
 import { MaskedLine } from "@/components/MaskedLine";
 import type { Slide } from "@/data/slides";
 import type { SlideDirection } from "@/hooks/useSlideNavigation";
+import type { PointerParallax } from "@/hooks/usePointerParallax";
 import {
   EASE_IN,
   EASE_OUT,
@@ -10,12 +11,14 @@ import {
   INVERSE_STAGGER,
   LABEL_DELAY,
   LABEL_STAGGER,
+  PARALLAX,
 } from "@/lib/motion";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useTransform } from "motion/react";
 
 type SideLabelsProps = {
   slide: Slide;
   direction: SlideDirection;
+  pointer: PointerParallax;
 };
 
 function InverseLine({ text, delay }: { text: string; delay: number }) {
@@ -56,10 +59,16 @@ function InverseLine({ text, delay }: { text: string; delay: number }) {
   );
 }
 
-export function SideLabels({ slide, direction }: SideLabelsProps) {
+export function SideLabels({ slide, direction, pointer }: SideLabelsProps) {
+  const x = useTransform(pointer.x, (value) => value * PARALLAX.label.x);
+  const y = useTransform(pointer.y, (value) => value * PARALLAX.label.y);
+
   return (
     <>
-      <div className="absolute right-[var(--pad-x-right)] bottom-[var(--label-top-bottom)] h-0">
+      <motion.div
+        className="absolute right-[var(--pad-x-right)] bottom-[var(--label-top-bottom)] h-0"
+        style={{ x, y }}
+      >
         <AnimatePresence custom={direction}>
           <motion.div
             key={slide.id}
@@ -78,8 +87,11 @@ export function SideLabels({ slide, direction }: SideLabelsProps) {
             ))}
           </motion.div>
         </AnimatePresence>
-      </div>
-      <div className="label-plain absolute right-[var(--pad-x-right)] bottom-[var(--label-bottom)] h-0">
+      </motion.div>
+      <motion.div
+        className="label-plain absolute right-[var(--pad-x-right)] bottom-[var(--label-bottom)] h-0"
+        style={{ x, y }}
+      >
         <AnimatePresence custom={direction}>
           <motion.div
             key={slide.id}
@@ -99,7 +111,7 @@ export function SideLabels({ slide, direction }: SideLabelsProps) {
             ))}
           </motion.div>
         </AnimatePresence>
-      </div>
+      </motion.div>
     </>
   );
 }

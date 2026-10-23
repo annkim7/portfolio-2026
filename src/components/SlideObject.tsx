@@ -2,26 +2,47 @@
 
 import type { Slide } from "@/data/slides";
 import type { SlideDirection } from "@/hooks/useSlideNavigation";
+import type { PointerParallax } from "@/hooks/usePointerParallax";
 import {
   DURATION,
   EASE_OUT,
   objectVariants,
+  PARALLAX,
   RUBBER_BAND_PX,
   SETTLE_SPRING,
 } from "@/lib/motion";
-import { AnimatePresence, motion, useAnimate } from "motion/react";
+import { AnimatePresence, motion, useAnimate, useTransform } from "motion/react";
 import Image from "next/image";
 import { useEffect } from "react";
 
 type SlideObjectProps = {
   slide: Slide;
   direction: SlideDirection;
+  pointer: PointerParallax;
   priority?: boolean;
   nudge?: { dir: SlideDirection; id: number } | null;
 };
 
-export function SlideObject({ slide, direction, priority = false, nudge }: SlideObjectProps) {
+export function SlideObject({
+  slide,
+  direction,
+  pointer,
+  priority = false,
+  nudge,
+}: SlideObjectProps) {
   const [scope, animate] = useAnimate();
+  const x = useTransform(pointer.x, (value) => `calc(-50% + ${value * PARALLAX.object.x}px)`);
+  const y = useTransform(pointer.y, (value) => `calc(-50% + ${value * PARALLAX.object.y}px)`);
+  const shadowX = useTransform(
+    pointer.x,
+    (value) => `calc(-50% + ${value * PARALLAX.shadow.x}px)`,
+  );
+  const shadowY = useTransform(
+    pointer.y,
+    (value) => `calc(-50% + ${value * PARALLAX.shadow.y}px)`,
+  );
+  const rotateY = useTransform(pointer.x, (value) => value * PARALLAX.object.rotate);
+  const rotateX = useTransform(pointer.y, (value) => value * -PARALLAX.object.rotate);
 
   useEffect(() => {
     if (!nudge || !scope.current) return;
@@ -33,7 +54,22 @@ export function SlideObject({ slide, direction, priority = false, nudge }: Slide
   }, [animate, nudge, scope]);
 
   return (
-    <div className="absolute top-[var(--object-cy)] left-1/2 aspect-square w-[var(--object-w)] -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute top-[var(--object-cy)] left-1/2 aspect-square w-[var(--object-w)]">
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute top-[78%] left-1/2 h-[16%] w-[58%] rounded-[50%] bg-black/10 blur-2xl"
+        style={{ x: shadowX, y: shadowY }}
+      />
+      <motion.div
+        className="h-full w-full"
+        style={{
+          x,
+          y,
+          rotateX,
+          rotateY,
+          transformPerspective: PARALLAX.perspective,
+        }}
+      >
       <div ref={scope} className="relative h-full w-full">
         <AnimatePresence custom={direction}>
           <motion.div
@@ -65,6 +101,7 @@ export function SlideObject({ slide, direction, priority = false, nudge }: Slide
           </motion.div>
         </AnimatePresence>
       </div>
+      </motion.div>
     </div>
   );
 }

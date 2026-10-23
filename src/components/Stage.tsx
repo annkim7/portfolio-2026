@@ -6,6 +6,7 @@ import { SideLabels } from "@/components/SideLabels";
 import { SlideObject } from "@/components/SlideObject";
 import { SlideTitle } from "@/components/SlideTitle";
 import { slides } from "@/data/slides";
+import { usePointerParallax } from "@/hooks/usePointerParallax";
 import {
   useSlideNavigation,
   type SlideDirection,
@@ -63,6 +64,7 @@ export function Stage() {
     onEdge,
   });
   const slide = slides[index];
+  const pointer = usePointerParallax();
 
   return (
     <div className="stage fixed inset-0">
@@ -71,11 +73,12 @@ export function Stage() {
       <SlideObject
         slide={slide}
         direction={direction}
+        pointer={pointer}
         priority={index === 0}
         nudge={nudge}
       />
-      <SlideTitle slide={slide} index={index} direction={direction} />
-      <SideLabels slide={slide} direction={direction} />
+      <SlideTitle slide={slide} index={index} direction={direction} pointer={pointer} />
+      <SideLabels slide={slide} direction={direction} pointer={pointer} />
       <Pagination count={slides.length} active={index} onSelect={goTo} />
     </div>
   );

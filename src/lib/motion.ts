@@ -15,6 +15,14 @@ export const RUBBER_BAND_PX = 12;
 
 export const SETTLE_SPRING = { type: "spring" as const, stiffness: 120, damping: 18 };
 export const DOT_SPRING = { type: "spring" as const, stiffness: 400, damping: 32 };
+export const POINTER_SPRING = { stiffness: 60, damping: 20, mass: 0.6 };
+export const PARALLAX = {
+  object: { x: 18, y: 14, rotate: 4 },
+  shadow: { x: -10, y: -6 },
+  title: { x: 6, y: 4 },
+  label: { x: 6, y: 4 },
+  perspective: 1200,
+};
 
 export const objectVariants = {
   enter: (direction: number) => ({
