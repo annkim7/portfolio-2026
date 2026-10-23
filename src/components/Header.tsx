@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Search, ShoppingCart } from "lucide-react";
+import { Menu, Search, ShoppingCart, X } from "lucide-react";
+import { useState } from "react";
 
 const navItems = ["LAYOUT", "DESIGN", "LUSON"] as const;
 
@@ -9,6 +10,8 @@ const controlClass =
   "pointer-events-auto cursor-pointer border-0 bg-transparent p-0 font-[inherit] text-[length:var(--fs-nav)] font-semibold tracking-[0.04em] text-[var(--fg)] transition-opacity duration-200 hover:opacity-50";
 
 export function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <motion.header
       className="pointer-events-none absolute inset-0 z-20"
@@ -29,7 +32,7 @@ export function Header() {
 
       <nav
         aria-label="주요 메뉴"
-        className="absolute top-[var(--header-top)] left-1/2 flex -translate-x-1/2 -translate-y-1/2"
+        className="nav-center absolute top-[var(--header-top)] left-1/2 flex -translate-x-1/2 -translate-y-1/2"
       >
         {navItems.map((item) => (
           <button
@@ -41,6 +44,30 @@ export function Header() {
           </button>
         ))}
       </nav>
+
+      <button
+        type="button"
+        className={`${controlClass} nav-menu-button absolute top-[var(--header-top)] right-[var(--icon-menu-right)] -translate-y-1/2 place-items-center`}
+        aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+        aria-expanded={menuOpen}
+        onClick={() => setMenuOpen((open) => !open)}
+      >
+        {menuOpen ? <X strokeWidth={1.75} size={14} /> : <Menu strokeWidth={1.75} size={14} />}
+      </button>
+      <div
+        className={`nav-menu-panel pointer-events-auto absolute top-[calc(var(--header-top)+28px)] right-[var(--icon-menu-right)] flex-col items-end gap-4 ${menuOpen ? "is-open" : ""}`}
+      >
+        {navItems.map((item) => (
+          <button
+            key={item}
+            type="button"
+            className={controlClass}
+            onClick={() => setMenuOpen(false)}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
 
       <button
         type="button"
