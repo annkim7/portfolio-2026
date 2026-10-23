@@ -62,6 +62,10 @@ body {
   display: none;
 }
 
+.stage {
+  container-type: size;
+}
+
 .stage-bg {
   background:
     radial-gradient(120% 90% at 50% 100%, var(--bg-light) 0%, transparent 60%),
@@ -125,4 +129,37 @@ body {
   :root {
     --object-w: min(31vw, 60vh);
   }
+}
+
+html.frame-mode body {
+  background: var(--frame);
+}
+
+html.frame-mode .stage {
+  inset: 5vh 5vw;
+  overflow: hidden;
+  border: 6px solid #f7f7f7;
+  border-radius: 24px;
+  background:
+    radial-gradient(120% 90% at 50% 100%, var(--bg-light) 0%, transparent 60%),
+    linear-gradient(200deg, var(--bg-dark) 0%, var(--bg) 55%);
+  box-shadow: 0 40px 60px -30px rgba(40, 48, 56, 0.45);
+}
+
+html.frame-mode {
+  --pad-x: 7cqw;
+  --pad-x-right: 5.8cqw;
+  --header-top: 9.5cqh;
+  --icon-search-right: 15.5cqw;
+  --icon-cart-right: 6.5cqw;
+  --icon-menu-right: 15.5cqw;
+  --product-left: 12.5cqw;
+  --nav-gap: 8.4cqw;
+  --index-bottom: 25cqh;
+  --title-bottom: 10.5cqh;
+  --dots-bottom: 11.5cqh;
+  --label-top-bottom: 21cqh;
+  --label-bottom: 10.5cqh;
+  --object-w: clamp(220px, 31cqw, 640px);
+  --object-cy: 52cqh;
 }

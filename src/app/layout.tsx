@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Oswald } from "next/font/google";
+import clsx from "clsx";
 import "./globals.css";
 
 const oswald = Oswald({
@@ -13,9 +14,11 @@ export const metadata: Metadata = {
   description: "Fullscreen parallax portfolio",
 };
 
+const frameMode = process.env.NEXT_PUBLIC_FRAME_MODE === "true";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={oswald.variable}>
+    <html lang="ko" className={clsx(oswald.variable, frameMode && "frame-mode")}>
       <body>{children}</body>
     </html>
   );

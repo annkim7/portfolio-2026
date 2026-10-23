@@ -27,7 +27,7 @@ export const PARALLAX = {
 
 export const objectVariants = {
   enter: (direction: number) => ({
-    y: `${45 * direction}vh`,
+    y: `${45 * direction}cqh`,
     scale: 0.85,
     rotate: 10 * direction,
     opacity: 0,
@@ -46,7 +46,7 @@ export const objectVariants = {
     },
   },
   exit: (direction: number) => ({
-    y: `${-35 * direction}vh`,
+    y: `${-35 * direction}cqh`,
     scale: 0.9,
     rotate: -8 * direction,
     opacity: 0,
