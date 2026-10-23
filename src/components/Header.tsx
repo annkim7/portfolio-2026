@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import { Search, ShoppingCart } from "lucide-react";
 
 const navItems = ["LAYOUT", "DESIGN", "LUSON"] as const;
@@ -7,7 +10,12 @@ const controlClass =
 
 export function Header() {
   return (
-    <header className="pointer-events-none absolute inset-0 z-20">
+    <motion.header
+      className="pointer-events-none absolute inset-0 z-20"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, delay: 0.8 }}
+    >
       <p className="absolute top-[var(--header-top)] left-[var(--pad-x)] m-0 -translate-y-1/2 text-[length:var(--fs-logo)] font-bold tracking-[0.02em]">
         DD
       </p>
@@ -48,6 +56,6 @@ export function Header() {
       >
         <ShoppingCart strokeWidth={1.75} size={14} />
       </button>
-    </header>
+    </motion.header>
   );
 }

@@ -6,24 +6,76 @@ import { SideLabels } from "@/components/SideLabels";
 import { SlideObject } from "@/components/SlideObject";
 import { SlideTitle } from "@/components/SlideTitle";
 import { slides } from "@/data/slides";
-import { useSlideNavigation } from "@/hooks/useSlideNavigation";
+import {
+  useSlideNavigation,
+  type SlideDirection,
+} from "@/hooks/useSlideNavigation";
+import { DURATION, EASE_OUT, TRANSITION_LOCK_MS } from "@/lib/motion";
+import { motion, useAnimation } from "motion/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-const TRANSITION_LOCK_MS = 1100;
+type Nudge = { dir: SlideDirection; id: number };
+
+function BackgroundShift({
+  index,
+  direction,
+}: {
+  index: number;
+  direction: SlideDirection;
+}) {
+  const controls = useAnimation();
+  const first = useRef(true);
+
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+
+    void controls.start({
+      backgroundPosition: ["50% 100%", `${50 + direction * 3}% 100%`, "50% 100%"],
+      transition: { duration: DURATION.enter, ease: EASE_OUT, times: [0, 0.4, 1] },
+    });
+  }, [controls, direction, index]);
+
+  return (
+    <motion.div
+      aria-hidden
+      className="stage-bg pointer-events-none absolute inset-0"
+      initial={{ backgroundPosition: "50% 100%" }}
+      animate={controls}
+    />
+  );
+}
 
 export function Stage() {
-  const { index, goTo } = useSlideNavigation({
+  const [nudge, setNudge] = useState<Nudge | null>(null);
+  const nudgeId = useRef(0);
+  const onEdge = useCallback((direction: SlideDirection) => {
+    nudgeId.current += 1;
+    setNudge({ dir: direction, id: nudgeId.current });
+  }, []);
+
+  const { index, direction, goTo } = useSlideNavigation({
     count: slides.length,
     duration: TRANSITION_LOCK_MS,
     ids: slides.map((slide) => slide.id),
+    onEdge,
   });
   const slide = slides[index];
 
   return (
     <div className="stage fixed inset-0">
+      <BackgroundShift index={index} direction={direction} />
       <Header />
-      <SlideObject slide={slide} priority={index === 0} />
-      <SlideTitle slide={slide} index={index} />
-      <SideLabels slide={slide} />
+      <SlideObject
+        slide={slide}
+        direction={direction}
+        priority={index === 0}
+        nudge={nudge}
+      />
+      <SlideTitle slide={slide} index={index} direction={direction} />
+      <SideLabels slide={slide} direction={direction} />
       <Pagination count={slides.length} active={index} onSelect={goTo} />
     </div>
   );

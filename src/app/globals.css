@@ -48,6 +48,13 @@ body {
   overscroll-behavior: none;
 }
 
+.stage-bg {
+  background:
+    radial-gradient(120% 90% at 50% 100%, var(--bg-light) 0%, transparent 60%),
+    linear-gradient(200deg, var(--bg-dark) 0%, var(--bg) 55%);
+  background-size: 106% 106%;
+}
+
 body {
   margin: 0;
   color: var(--fg);
