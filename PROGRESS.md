@@ -16,3 +16,4 @@
 | 2026-10-23 | feature-frame-mode | 8.3 | merged | NEXT_PUBLIC_FRAME_MODE, cqw/cqh 카드 프레임 |
 | 2026-10-23 | feature-performance | 9 | merged | 인접 이미지 프리로드, 모바일 blur 제거, will-change |
 | 2026-10-23 | feature-fix-motion-constants | 10 | merged | 모션 상수를 motion.ts로 모음, QA 후 릴리스 준비 |
+| 2026-10-24 | feature-slide-image | - | merged | 플레이스홀더 SVG를 main_slider_01.png로 교체 |

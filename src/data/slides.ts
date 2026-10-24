@@ -8,19 +8,19 @@ export type Slide = {
   href?: string;
 };
 
-// TODO: Replace placeholder SVGs in public/images/slides with transparent
-// product photos (WebP, long edge 1200–1600px, under 300KB).
+const slideImage = {
+  src: "/images/slides/main_slider_01.png",
+  alt: "Wood grain cross section",
+  width: 433,
+  height: 577,
+};
+
 export const slides: Slide[] = [
   {
     id: "ring",
     title: "SILVER .",
     subtitle: "RING",
-    image: {
-      src: "/images/slides/placeholder-01.svg",
-      alt: "Silver ring",
-      width: 1200,
-      height: 1200,
-    },
+    image: slideImage,
     labelInverse: ["LUSON", "ONE DAY WORKS"],
     label: ["UI", "PROJECT", "WORKS"],
   },
@@ -28,12 +28,7 @@ export const slides: Slide[] = [
     id: "diamond",
     title: "DIAMOND .",
     subtitle: "JEWELRY",
-    image: {
-      src: "/images/slides/placeholder-02.svg",
-      alt: "Diamond jewelry",
-      width: 1200,
-      height: 1200,
-    },
+    image: slideImage,
     labelInverse: ["LUSON", "ONE DAY WORKS"],
     label: ["UI", "PROJECT", "WORKS"],
   },
@@ -41,12 +36,7 @@ export const slides: Slide[] = [
     id: "pearl",
     title: "PEARL .",
     subtitle: "EARRING",
-    image: {
-      src: "/images/slides/placeholder-03.svg",
-      alt: "Pearl earring",
-      width: 1200,
-      height: 1200,
-    },
+    image: slideImage,
     labelInverse: ["LUSON", "ONE DAY WORKS"],
     label: ["UI", "PROJECT", "WORKS"],
   },
