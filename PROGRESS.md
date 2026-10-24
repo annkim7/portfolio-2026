@@ -18,3 +18,4 @@
 | 2026-10-23 | feature-fix-motion-constants | 10 | merged | 모션 상수를 motion.ts로 모음, QA 후 릴리스 준비 |
 | 2026-10-24 | feature-slide-image | - | merged | 플레이스홀더 SVG를 main_slider_01.png로 교체 |
 | 2026-10-24 | feature-slide-images | - | merged | 슬라이드별 main_slider 이미지, 오브젝트 이동 22/16cqh |
+| 2026-10-24 | feature-slide-copy | - | merged | 포트폴리오 문구, LinkedIn·GitHub 아이콘, 환경 변수 링크 |
