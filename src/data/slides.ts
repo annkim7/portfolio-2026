@@ -8,19 +8,17 @@ export type Slide = {
   href?: string;
 };
 
-const slideImage = {
-  src: "/images/slides/main_slider_01.png",
-  alt: "Wood grain cross section",
-  width: 433,
-  height: 577,
-};
-
 export const slides: Slide[] = [
   {
     id: "ring",
     title: "SILVER .",
     subtitle: "RING",
-    image: slideImage,
+    image: {
+      src: "/images/slides/main_slider_01.png",
+      alt: "Wood grain cross section",
+      width: 564,
+      height: 752,
+    },
     labelInverse: ["LUSON", "ONE DAY WORKS"],
     label: ["UI", "PROJECT", "WORKS"],
   },
@@ -28,7 +26,12 @@ export const slides: Slide[] = [
     id: "diamond",
     title: "DIAMOND .",
     subtitle: "JEWELRY",
-    image: slideImage,
+    image: {
+      src: "/images/slides/main_slider_02.png",
+      alt: "Rough stone",
+      width: 750,
+      height: 1000,
+    },
     labelInverse: ["LUSON", "ONE DAY WORKS"],
     label: ["UI", "PROJECT", "WORKS"],
   },
@@ -36,7 +39,12 @@ export const slides: Slide[] = [
     id: "pearl",
     title: "PEARL .",
     subtitle: "EARRING",
-    image: slideImage,
+    image: {
+      src: "/images/slides/main_slider_03.png",
+      alt: "Folded white form",
+      width: 580,
+      height: 870,
+    },
     labelInverse: ["LUSON", "ONE DAY WORKS"],
     label: ["UI", "PROJECT", "WORKS"],
   },
