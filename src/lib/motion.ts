@@ -7,6 +7,8 @@ export const TRANSITION_LOCK_MS = 1100;
 export const REDUCED_DURATION = 0.3;
 
 export const OBJECT_ENTER_DELAY = 0.15;
+export const OBJECT_ENTER_TRAVEL = 22;
+export const OBJECT_EXIT_TRAVEL = 16;
 export const TITLE_DELAY = { index: 0.3, title: 0.35, subtitle: 0.42 };
 export const INVERSE_DELAY = 0.45;
 export const INVERSE_STAGGER = 0.06;
@@ -34,7 +36,7 @@ export const PARALLAX = {
 
 export const objectVariants = {
   enter: (direction: number) => ({
-    y: `${45 * direction}cqh`,
+    y: `${OBJECT_ENTER_TRAVEL * direction}cqh`,
     scale: 0.85,
     rotate: 10 * direction,
     opacity: 0,
@@ -53,7 +55,7 @@ export const objectVariants = {
     },
   },
   exit: (direction: number) => ({
-    y: `${-35 * direction}cqh`,
+    y: `${-OBJECT_EXIT_TRAVEL * direction}cqh`,
     scale: 0.9,
     rotate: -8 * direction,
     opacity: 0,

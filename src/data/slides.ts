@@ -8,46 +8,44 @@ export type Slide = {
   href?: string;
 };
 
-// TODO: Replace placeholder SVGs in public/images/slides with transparent
-// product photos (WebP, long edge 1200–1600px, under 300KB).
 export const slides: Slide[] = [
   {
     id: "ring",
-    title: "SILVER .",
-    subtitle: "RING",
+    title: "REACT .",
+    subtitle: "REACT NATIVE",
     image: {
-      src: "/images/slides/placeholder-01.svg",
-      alt: "Silver ring",
-      width: 1200,
-      height: 1200,
+      src: "/images/slides/main_slider_01.png",
+      alt: "Wood grain cross section",
+      width: 564,
+      height: 752,
     },
-    labelInverse: ["LUSON", "ONE DAY WORKS"],
-    label: ["UI", "PROJECT", "WORKS"],
+    labelInverse: ["ANN", "DEVELOPMENT", "STACK"],
+    label: ["2026", "PROJECT", "HISTORY"],
   },
   {
     id: "diamond",
-    title: "DIAMOND .",
-    subtitle: "JEWELRY",
+    title: "JAVA .",
+    subtitle: "JAVA SPRING",
     image: {
-      src: "/images/slides/placeholder-02.svg",
-      alt: "Diamond jewelry",
-      width: 1200,
-      height: 1200,
+      src: "/images/slides/main_slider_02.png",
+      alt: "Rough stone",
+      width: 750,
+      height: 1000,
     },
-    labelInverse: ["LUSON", "ONE DAY WORKS"],
-    label: ["UI", "PROJECT", "WORKS"],
+    labelInverse: ["ANN", "DEVELOPMENT", "STACK"],
+    label: ["2026", "PROJECT", "HISTORY"],
   },
   {
     id: "pearl",
-    title: "PEARL .",
-    subtitle: "EARRING",
+    title: "SQL .",
+    subtitle: "POSTGRESQL",
     image: {
-      src: "/images/slides/placeholder-03.svg",
-      alt: "Pearl earring",
-      width: 1200,
-      height: 1200,
+      src: "/images/slides/main_slider_03.png",
+      alt: "Folded white form",
+      width: 580,
+      height: 870,
     },
-    labelInverse: ["LUSON", "ONE DAY WORKS"],
-    label: ["UI", "PROJECT", "WORKS"],
+    labelInverse: ["ANN", "DEVELOPMENT", "STACK"],
+    label: ["2026", "PROJECT", "HISTORY"],
   },
 ];

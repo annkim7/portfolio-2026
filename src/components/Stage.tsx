@@ -6,6 +6,7 @@ import { SideLabels } from "@/components/SideLabels";
 import { SlideObject } from "@/components/SlideObject";
 import { SlideTitle } from "@/components/SlideTitle";
 import { slides } from "@/data/slides";
+import type { SiteLinks } from "@/lib/links";
 import { usePointerParallax } from "@/hooks/usePointerParallax";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import {
@@ -80,7 +81,7 @@ function AdjacentSlides({ index }: { index: number }) {
   );
 }
 
-export function Stage() {
+export function Stage({ links }: { links: SiteLinks }) {
   const [nudge, setNudge] = useState<Nudge | null>(null);
   const nudgeId = useRef(0);
   const onEdge = useCallback((direction: SlideDirection) => {
@@ -110,7 +111,7 @@ export function Stage() {
         {announcement}
       </p>
       <BackgroundShift index={index} direction={direction} />
-      <Header />
+      <Header links={links} />
       <AdjacentSlides index={index} />
       <SlideObject
         slide={slide}
