@@ -3,6 +3,7 @@ export type Slide = {
   title: string;
   subtitle: string;
   image: { src: string; alt: string; width: number; height: number };
+  object?: "ascii-ocean";
   labelInverse: string[];
   label: string[];
   href?: string;
@@ -41,10 +42,11 @@ export const slides: Slide[] = [
     subtitle: "POSTGRESQL",
     image: {
       src: "/images/slides/main_slider_03.png",
-      alt: "Folded white form",
+      alt: "ASCII sharks and fish",
       width: 580,
       height: 870,
     },
+    object: "ascii-ocean",
     labelInverse: ["ANN", "DEVELOPMENT", "STACK"],
     label: ["2026", "PROJECT", "HISTORY"],
   },

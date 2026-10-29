@@ -66,6 +66,7 @@ function AdjacentSlides({ index }: { index: number }) {
     <div aria-hidden className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
       {neighbors.map((item) => {
         const neighbor = slides[item];
+        if (neighbor.object === "ascii-ocean") return null;
         return (
           <Image
             key={neighbor.id}
