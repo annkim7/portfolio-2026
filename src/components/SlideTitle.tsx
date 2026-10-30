@@ -1,67 +1,34 @@
 "use client";
 
-import { MaskedLine } from "@/components/MaskedLine";
 import type { Slide } from "@/data/slides";
-import type { SlideDirection } from "@/hooks/useSlideNavigation";
-import type { PointerParallax } from "@/hooks/usePointerParallax";
-import { PARALLAX, TITLE_DELAY } from "@/lib/motion";
-import { AnimatePresence, motion, useTransform } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
-type SlideTitleProps = {
-  slide: Slide;
-  index: number;
-  direction: SlideDirection;
-  pointer: PointerParallax;
-};
-
-export function SlideTitle({ slide, index, direction, pointer }: SlideTitleProps) {
-  const number = String(index + 1).padStart(2, "0");
-  const x = useTransform(pointer.x, (value) => value * PARALLAX.title.x);
-  const y = useTransform(pointer.y, (value) => value * PARALLAX.title.y);
-
+export function SlideTitle({ slide, reduced }: { slide: Slide; reduced: boolean }) {
   return (
-    <>
-      <motion.div
-        className="absolute bottom-[var(--index-bottom)] left-[var(--pad-x)] h-0"
-        style={{ x, y }}
-      >
-        <AnimatePresence custom={direction}>
-          <motion.div
-            key={slide.id}
-            custom={direction}
-            className="absolute bottom-0 left-0 w-max"
-            initial="enter"
-            animate="center"
-            exit="exit"
-          >
-            <p className="m-0 text-[length:var(--fs-index)] font-semibold whitespace-nowrap">
-              <MaskedLine delay={TITLE_DELAY.index}>{number}</MaskedLine>
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
-      <motion.div
-        className="absolute bottom-[var(--title-bottom)] left-[var(--pad-x)] h-0"
-        style={{ x, y }}
-      >
-        <AnimatePresence custom={direction}>
-          <motion.div
-            key={slide.id}
-            custom={direction}
-            className="absolute bottom-0 left-0 w-max"
-            initial="enter"
-            animate="center"
-            exit="exit"
-          >
-            <p className="m-0 text-[length:var(--fs-title)] leading-none font-bold whitespace-nowrap">
-              <MaskedLine delay={TITLE_DELAY.title}>{slide.title}</MaskedLine>
-            </p>
-            <p className="m-0 text-[length:var(--fs-sub)] leading-[1.1] font-bold whitespace-nowrap">
-              <MaskedLine delay={TITLE_DELAY.subtitle}>{slide.subtitle}</MaskedLine>
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
-    </>
+    <div className="title-slot">
+      <AnimatePresence initial={false}>
+        <motion.h1
+          key={slide.id}
+          className="hero-title"
+          initial={reduced ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="l1">{slide.title}</span>
+          <span className="l2">{slide.subtitle}</span>
+          <span className="l3">
+            {slide.meta}{" "}
+            <span
+              className="copy-mark"
+              style={{ fontFamily: '"JetBrains Mono", ui-monospace, sans-serif', fontWeight: 500 }}
+            >
+              ©
+            </span>{" "}
+            2026
+          </span>
+        </motion.h1>
+      </AnimatePresence>
+    </div>
   );
 }

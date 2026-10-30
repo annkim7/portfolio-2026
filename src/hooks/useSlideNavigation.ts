@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 export type SlideDirection = 1 | -1;
 
@@ -10,6 +10,7 @@ type UseSlideNavigationOptions = {
   loop?: boolean;
   ids?: string[];
   onEdge?: (direction: SlideDirection) => void;
+  rootRef?: RefObject<HTMLElement | null>;
 };
 
 type UseSlideNavigationResult = {
@@ -39,6 +40,7 @@ export function useSlideNavigation({
   loop = false,
   ids,
   onEdge,
+  rootRef,
 }: UseSlideNavigationOptions): UseSlideNavigationResult {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<SlideDirection>(1);
@@ -52,10 +54,15 @@ export function useSlideNavigation({
   const lastWheelRef = useRef(0);
   const awaitingQuietRef = useRef(false);
   const touchRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const rootRefLive = useRef(rootRef);
 
   useEffect(() => {
     idsRef.current = ids;
   }, [ids]);
+
+  useEffect(() => {
+    rootRefLive.current = rootRef;
+  }, [rootRef]);
 
   useEffect(() => {
     onEdgeRef.current = onEdge;
@@ -200,6 +207,18 @@ export function useSlideNavigation({
           target.tagName === "TEXTAREA" ||
           target.tagName === "SELECT" ||
           target.isContentEditable)
+      ) {
+        return;
+      }
+
+      const root = rootRefLive.current?.current;
+      const active = document.activeElement;
+      if (
+        root &&
+        active instanceof Node &&
+        active !== document.body &&
+        active !== document.documentElement &&
+        !root.contains(active)
       ) {
         return;
       }

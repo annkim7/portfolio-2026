@@ -1,61 +1,18 @@
 "use client";
 
+import { CreatureLayer } from "@/components/CreatureLayer";
+import { DotRow } from "@/components/DotRow";
 import { Header } from "@/components/Header";
 import { Pagination } from "@/components/Pagination";
 import { SideLabels } from "@/components/SideLabels";
 import { SlideObject } from "@/components/SlideObject";
 import { SlideTitle } from "@/components/SlideTitle";
 import { slides } from "@/data/slides";
-import type { SiteLinks } from "@/lib/links";
-import { usePointerParallax } from "@/hooks/usePointerParallax";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import {
-  useSlideNavigation,
-  type SlideDirection,
-} from "@/hooks/useSlideNavigation";
-import { BACKGROUND_SHIFT_TIMES, DURATION, EASE_OUT, TRANSITION_LOCK_MS } from "@/lib/motion";
-import { motion, useAnimation } from "motion/react";
+import { useSlideNavigation } from "@/hooks/useSlideNavigation";
+import type { SiteLinks } from "@/lib/links";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-
-type Nudge = { dir: SlideDirection; id: number };
-
-function BackgroundShift({
-  index,
-  direction,
-}: {
-  index: number;
-  direction: SlideDirection;
-}) {
-  const controls = useAnimation();
-  const first = useRef(true);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    if (first.current) {
-      first.current = false;
-      return;
-    }
-
-    if (reduced) return;
-
-    void controls.start({
-      backgroundPosition: ["50% 100%", `${50 + direction * 3}% 100%`, "50% 100%"],
-      transition: { duration: DURATION.enter, ease: EASE_OUT, times: [...BACKGROUND_SHIFT_TIMES] },
-    });
-  }, [controls, direction, index, reduced]);
-
-  return (
-    <motion.div
-      aria-hidden
-      className="stage-bg pointer-events-none absolute inset-0"
-      initial={{ backgroundPosition: "50% 100%" }}
-      animate={controls}
-    />
-  );
-}
-
-const imageSizes = "(max-width: 767px) 72vw, (max-width: 1023px) 42vw, 31vw";
+import { useRef } from "react";
 
 function AdjacentSlides({ index }: { index: number }) {
   const neighbors = [index - 1, index + 1].filter(
@@ -63,9 +20,10 @@ function AdjacentSlides({ index }: { index: number }) {
   );
 
   return (
-    <div aria-hidden className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
+    <div aria-hidden className="preload-slot">
       {neighbors.map((item) => {
         const neighbor = slides[item];
+        if (!neighbor.image) return null;
         return (
           <Image
             key={neighbor.id}
@@ -73,7 +31,7 @@ function AdjacentSlides({ index }: { index: number }) {
             alt=""
             width={neighbor.image.width}
             height={neighbor.image.height}
-            sizes={imageSizes}
+            sizes="100vw"
           />
         );
       })}
@@ -82,27 +40,22 @@ function AdjacentSlides({ index }: { index: number }) {
 }
 
 export function Stage({ links }: { links: SiteLinks }) {
-  const [nudge, setNudge] = useState<Nudge | null>(null);
-  const nudgeId = useRef(0);
-  const onEdge = useCallback((direction: SlideDirection) => {
-    nudgeId.current += 1;
-    setNudge({ dir: direction, id: nudgeId.current });
-  }, []);
-
-  const { index, direction, goTo, isAnimating } = useSlideNavigation({
+  const rootRef = useRef<HTMLDivElement>(null);
+  const { index, goTo } = useSlideNavigation({
     count: slides.length,
-    duration: TRANSITION_LOCK_MS,
+    duration: 450,
     ids: slides.map((slide) => slide.id),
-    onEdge,
+    rootRef,
   });
   const slide = slides[index];
   const reduced = useReducedMotion();
-  const pointer = usePointerParallax(!reduced);
-  const announcement = `${index + 1} / ${slides.length}: ${slide.title.replace(/\s+\.\s*$/, "")} ${slide.subtitle}`;
+  const announcement = `${index + 1} / ${slides.length}: ${slide.title.replace(/\.$/, "")} ${slide.subtitle}`;
 
   return (
     <div
+      ref={rootRef}
       className="stage fixed inset-0"
+      tabIndex={0}
       role="region"
       aria-roledescription="carousel"
       aria-label={announcement}
@@ -110,20 +63,22 @@ export function Stage({ links }: { links: SiteLinks }) {
       <p className="sr-only" aria-live="polite">
         {announcement}
       </p>
-      <BackgroundShift index={index} direction={direction} />
-      <Header links={links} />
-      <AdjacentSlides index={index} />
-      <SlideObject
-        slide={slide}
-        direction={direction}
-        pointer={pointer}
-        priority={index === 0}
-        isAnimating={isAnimating}
-        nudge={nudge}
-      />
-      <SlideTitle slide={slide} index={index} direction={direction} pointer={pointer} />
-      <SideLabels slide={slide} direction={direction} pointer={pointer} />
-      <Pagination count={slides.length} active={index} onSelect={goTo} />
+      <div className="hero">
+        <AdjacentSlides index={index} />
+        <SlideObject slide={slide} reduced={reduced} priority={index === 0} />
+        <SlideTitle slide={slide} reduced={reduced} />
+        <CreatureLayer active={slide.visual === "ocean"} />
+        <div className="hero-frame">
+          <span className="bracket tl" aria-hidden="true" />
+          <span className="bracket tr" aria-hidden="true" />
+          <span className="bracket bl" aria-hidden="true" />
+          <span className="bracket br" aria-hidden="true" />
+          <Header links={links} />
+          <DotRow slide={slide} />
+          <SideLabels />
+          <Pagination active={index} onSelect={goTo} />
+        </div>
+      </div>
     </div>
   );
 }
