@@ -38,6 +38,8 @@ export type AsciiOceanProps = {
   sharkChars?: string;
   fishChar?: string;
   interactive?: boolean;
+  paused?: boolean;
+  decorative?: boolean;
   className?: string;
   label?: string;
 };
@@ -84,6 +86,8 @@ export function AsciiOcean({
   sharkChars = ":;t%SX8#@",
   fishChar = "-",
   interactive = true,
+  paused = false,
+  decorative = false,
   className,
   label = "ASCII ocean",
 }: AsciiOceanProps) {
@@ -115,7 +119,6 @@ export function AsciiOcean({
     interactive,
     fishSpecies: Math.max(-1, FISH.indexOf(fishType) - 1),
   };
-  Object.assign(cfgRef.current, next);
   const liveKey = JSON.stringify(next);
 
   useEffect(() => {
@@ -135,13 +138,20 @@ export function AsciiOcean({
   }, [fishCount, fishType, sharkCount, sharkSize, sharkType]);
 
   useEffect(() => {
+    Object.assign(cfgRef.current, JSON.parse(liveKey) as OceanConfig);
     engineRef.current?.updateConfig();
   }, [liveKey]);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => engineRef.current?.setRunning(!paused), paused ? 300 : 0);
+    return () => window.clearTimeout(timer);
+  }, [paused]);
+
   return (
     <div
-      role="img"
-      aria-label={label}
+      role={decorative ? undefined : "img"}
+      aria-hidden={decorative ? true : undefined}
+      aria-label={decorative ? undefined : label}
       className={className}
       style={{
         position: "relative",

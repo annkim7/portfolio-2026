@@ -30,5 +30,6 @@ export declare class OceanEngine {
     cfg?: OceanConfig,
   );
   updateConfig(): void;
+  setRunning(on: boolean): void;
   destroy(): void;
 }
