@@ -15,7 +15,7 @@ export function Pagination({ active, onSelect }: PaginationProps) {
             key={slide.id}
             type="button"
             aria-label={slide.tab}
-            aria-current={index === active ? "page" : undefined}
+            aria-current={index === active ? "true" : undefined}
             onClick={() => onSelect(index)}
           >
             {number}

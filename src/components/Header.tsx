@@ -1,7 +1,7 @@
 "use client";
 
 import type { SiteLinks } from "@/lib/links";
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 const projects = [
   { label: "ANDROID", key: "android" },
@@ -32,18 +32,32 @@ export function Header({ links }: { links: SiteLinks }) {
   const panelId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const closeMenu = useCallback(() => {
+    setOpen(false);
+    buttonRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     if (!open) return;
 
+    const items = panelRef.current?.querySelectorAll<HTMLAnchorElement>("a");
+    if (items) {
+      for (const item of items) {
+        if (item.getClientRects().length > 0) {
+          item.focus();
+          break;
+        }
+      }
+    }
+
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") closeMenu();
     };
     const onPointer = (event: PointerEvent) => {
       const target = event.target;
       if (!(target instanceof Node)) return;
       if (buttonRef.current?.contains(target) || panelRef.current?.contains(target)) return;
-      setOpen(false);
+      closeMenu();
     };
 
     window.addEventListener("keydown", onKey);
@@ -52,7 +66,7 @@ export function Header({ links }: { links: SiteLinks }) {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onPointer);
     };
-  }, [open]);
+  }, [closeMenu, open]);
 
   return (
     <>
@@ -97,14 +111,14 @@ export function Header({ links }: { links: SiteLinks }) {
       </div>
       {open ? (
         <div ref={panelRef} id={panelId} className="menu-panel">
-          <ExternalLink href={links.linkedin} className="menu-link-compact" onClick={() => setOpen(false)}>
+          <ExternalLink href={links.linkedin} className="menu-link-compact" onClick={() => closeMenu()}>
             LINKEDIN
           </ExternalLink>
-          <ExternalLink href={links.github} className="menu-link-compact" onClick={() => setOpen(false)}>
+          <ExternalLink href={links.github} className="menu-link-compact" onClick={() => closeMenu()}>
             GITHUB
           </ExternalLink>
           {projects.map((item) => (
-            <ExternalLink key={item.key} href={links[item.key]} onClick={() => setOpen(false)}>
+            <ExternalLink key={item.key} href={links[item.key]} onClick={() => closeMenu()}>
               {item.label}
             </ExternalLink>
           ))}

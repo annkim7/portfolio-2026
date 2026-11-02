@@ -58,7 +58,7 @@ export function Stage({ links }: { links: SiteLinks }) {
       tabIndex={0}
       role="region"
       aria-roledescription="carousel"
-      aria-label={announcement}
+      aria-label="기술 스택 슬라이드"
     >
       <p className="sr-only" aria-live="polite">
         {announcement}

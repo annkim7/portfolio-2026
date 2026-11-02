@@ -211,6 +211,8 @@ export function useSlideNavigation({
         return;
       }
 
+      if (document.querySelector(".menu-panel")) return;
+
       const root = rootRefLive.current?.current;
       const active = document.activeElement;
       if (
