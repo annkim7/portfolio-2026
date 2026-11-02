@@ -1,7 +1,7 @@
 "use client";
 
 import type { SiteLinks } from "@/lib/links";
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 const projects = [
   { label: "ANDROID", key: "android" },
@@ -27,23 +27,53 @@ function ExternalLink({
   );
 }
 
-export function Header({ links }: { links: SiteLinks }) {
+export function Header({
+  links,
+  onOpenChange,
+}: {
+  links: SiteLinks;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const setMenuOpen = useCallback(
+    (next: boolean) => {
+      setOpen(next);
+      onOpenChange?.(next);
+    },
+    [onOpenChange],
+  );
+  const closeMenu = useCallback(
+    (restoreFocus: boolean) => {
+      setMenuOpen(false);
+      if (restoreFocus) buttonRef.current?.focus();
+    },
+    [setMenuOpen],
+  );
 
   useEffect(() => {
     if (!open) return;
 
+    const items = panelRef.current?.querySelectorAll<HTMLAnchorElement>("a");
+    if (items) {
+      for (const item of items) {
+        if (item.getClientRects().length > 0) {
+          item.focus();
+          break;
+        }
+      }
+    }
+
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") closeMenu(true);
     };
     const onPointer = (event: PointerEvent) => {
       const target = event.target;
       if (!(target instanceof Node)) return;
       if (buttonRef.current?.contains(target) || panelRef.current?.contains(target)) return;
-      setOpen(false);
+      closeMenu(false);
     };
 
     window.addEventListener("keydown", onKey);
@@ -52,7 +82,7 @@ export function Header({ links }: { links: SiteLinks }) {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onPointer);
     };
-  }, [open]);
+  }, [closeMenu, open]);
 
   return (
     <>
@@ -79,7 +109,7 @@ export function Header({ links }: { links: SiteLinks }) {
           aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
           aria-expanded={open}
           aria-controls={panelId}
-          onClick={() => setOpen((value) => !value)}
+          onClick={() => setMenuOpen(!open)}
         >
           {open ? (
             <span className="burger-x" aria-hidden="true">
@@ -97,14 +127,14 @@ export function Header({ links }: { links: SiteLinks }) {
       </div>
       {open ? (
         <div ref={panelRef} id={panelId} className="menu-panel">
-          <ExternalLink href={links.linkedin} className="menu-link-compact" onClick={() => setOpen(false)}>
+          <ExternalLink href={links.linkedin} className="menu-link-compact" onClick={() => closeMenu(true)}>
             LINKEDIN
           </ExternalLink>
-          <ExternalLink href={links.github} className="menu-link-compact" onClick={() => setOpen(false)}>
+          <ExternalLink href={links.github} className="menu-link-compact" onClick={() => closeMenu(true)}>
             GITHUB
           </ExternalLink>
           {projects.map((item) => (
-            <ExternalLink key={item.key} href={links[item.key]} onClick={() => setOpen(false)}>
+            <ExternalLink key={item.key} href={links[item.key]} onClick={() => closeMenu(true)}>
               {item.label}
             </ExternalLink>
           ))}

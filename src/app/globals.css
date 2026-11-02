@@ -451,7 +451,7 @@ body {
   cursor: pointer;
 }
 
-.slide-tabs button[aria-current="page"] {
+.slide-tabs button[aria-current="true"] {
   text-decoration: underline;
   text-underline-offset: 4px;
 }

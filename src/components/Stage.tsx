@@ -12,7 +12,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSlideNavigation } from "@/hooks/useSlideNavigation";
 import type { SiteLinks } from "@/lib/links";
 import Image from "next/image";
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 function AdjacentSlides({ index }: { index: number }) {
   const neighbors = [index - 1, index + 1].filter(
@@ -41,11 +41,14 @@ function AdjacentSlides({ index }: { index: number }) {
 
 export function Stage({ links }: { links: SiteLinks }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const onMenuOpenChange = useCallback((open: boolean) => setMenuOpen(open), []);
   const { index, goTo } = useSlideNavigation({
     count: slides.length,
     duration: 450,
     ids: slides.map((slide) => slide.id),
     rootRef,
+    blocked: menuOpen,
   });
   const slide = slides[index];
   const reduced = useReducedMotion();
@@ -58,7 +61,7 @@ export function Stage({ links }: { links: SiteLinks }) {
       tabIndex={0}
       role="region"
       aria-roledescription="carousel"
-      aria-label={announcement}
+      aria-label="기술 스택 슬라이드"
     >
       <p className="sr-only" aria-live="polite">
         {announcement}
@@ -73,7 +76,7 @@ export function Stage({ links }: { links: SiteLinks }) {
           <span className="bracket tr" aria-hidden="true" />
           <span className="bracket bl" aria-hidden="true" />
           <span className="bracket br" aria-hidden="true" />
-          <Header links={links} />
+          <Header links={links} onOpenChange={onMenuOpenChange} />
           <DotRow slide={slide} />
           <SideLabels />
           <Pagination active={index} onSelect={goTo} />

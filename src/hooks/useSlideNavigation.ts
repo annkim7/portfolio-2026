@@ -11,6 +11,7 @@ type UseSlideNavigationOptions = {
   ids?: string[];
   onEdge?: (direction: SlideDirection) => void;
   rootRef?: RefObject<HTMLElement | null>;
+  blocked?: boolean;
 };
 
 type UseSlideNavigationResult = {
@@ -41,6 +42,7 @@ export function useSlideNavigation({
   ids,
   onEdge,
   rootRef,
+  blocked = false,
 }: UseSlideNavigationOptions): UseSlideNavigationResult {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<SlideDirection>(1);
@@ -211,6 +213,8 @@ export function useSlideNavigation({
         return;
       }
 
+      if (blocked) return;
+
       const root = rootRefLive.current?.current;
       const active = document.activeElement;
       if (
@@ -269,7 +273,7 @@ export function useSlideNavigation({
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [count, go, goTo, next, prev]);
+  }, [blocked, count, go, goTo, next, prev]);
 
   return { index, direction, goTo, next, prev, isAnimating };
 }
