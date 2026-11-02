@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 export type SlideDirection = 1 | -1;
 
@@ -10,15 +10,15 @@ type UseSlideNavigationOptions = {
   loop?: boolean;
   ids?: string[];
   onEdge?: (direction: SlideDirection) => void;
+  rootRef?: RefObject<HTMLElement | null>;
+  blocked?: boolean;
 };
 
 type UseSlideNavigationResult = {
   index: number;
-  direction: SlideDirection;
   goTo: (index: number) => void;
   next: () => void;
   prev: () => void;
-  isAnimating: boolean;
 };
 
 const WHEEL_THRESHOLD = 40;
@@ -39,10 +39,10 @@ export function useSlideNavigation({
   loop = false,
   ids,
   onEdge,
+  rootRef,
+  blocked = false,
 }: UseSlideNavigationOptions): UseSlideNavigationResult {
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState<SlideDirection>(1);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   const indexRef = useRef(0);
   const animatingRef = useRef(false);
@@ -52,24 +52,27 @@ export function useSlideNavigation({
   const lastWheelRef = useRef(0);
   const awaitingQuietRef = useRef(false);
   const touchRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const rootRefLive = useRef(rootRef);
 
   useEffect(() => {
     idsRef.current = ids;
   }, [ids]);
 
   useEffect(() => {
+    rootRefLive.current = rootRef;
+  }, [rootRef]);
+
+  useEffect(() => {
     onEdgeRef.current = onEdge;
   }, [onEdge]);
 
   const commit = useCallback(
-    (nextIndex: number, nextDirection: SlideDirection) => {
+    (nextIndex: number) => {
       if (animatingRef.current || nextIndex === indexRef.current) return;
 
       indexRef.current = nextIndex;
       animatingRef.current = true;
       setIndex(nextIndex);
-      setDirection(nextDirection);
-      setIsAnimating(true);
 
       const slideId = idsRef.current?.[nextIndex];
       if (slideId) {
@@ -81,7 +84,6 @@ export function useSlideNavigation({
 
       window.setTimeout(() => {
         animatingRef.current = false;
-        setIsAnimating(false);
       }, duration);
     },
     [duration],
@@ -94,14 +96,14 @@ export function useSlideNavigation({
       const target = indexRef.current + nextDirection;
       if (target < 0 || target >= count) {
         if (loop) {
-          commit((target + count) % count, nextDirection);
+          commit((target + count) % count);
           return;
         }
         onEdgeRef.current?.(nextDirection);
         return;
       }
 
-      commit(target, nextDirection);
+      commit(target);
     },
     [commit, count, loop],
   );
@@ -109,7 +111,7 @@ export function useSlideNavigation({
   const goTo = useCallback(
     (target: number) => {
       if (target < 0 || target >= count || target === indexRef.current) return;
-      commit(target, target > indexRef.current ? 1 : -1);
+      commit(target);
     },
     [commit, count],
   );
@@ -204,6 +206,20 @@ export function useSlideNavigation({
         return;
       }
 
+      if (blocked) return;
+
+      const root = rootRefLive.current?.current;
+      const active = document.activeElement;
+      if (
+        root &&
+        active instanceof Node &&
+        active !== document.body &&
+        active !== document.documentElement &&
+        !root.contains(active)
+      ) {
+        return;
+      }
+
       if (
         event.key === "ArrowDown" ||
         event.key === "ArrowRight" ||
@@ -250,7 +266,7 @@ export function useSlideNavigation({
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [count, go, goTo, next, prev]);
+  }, [blocked, count, go, goTo, next, prev]);
 
-  return { index, direction, goTo, next, prev, isAnimating };
+  return { index, goTo, next, prev };
 }

@@ -1,51 +1,63 @@
+export type SlideVisual = "rings" | "rock" | "ocean";
+
 export type Slide = {
   id: string;
+  stack: string;
+  category: string;
   title: string;
   subtitle: string;
-  image: { src: string; alt: string; width: number; height: number };
-  labelInverse: string[];
-  label: string[];
-  href?: string;
+  meta: string;
+  tab: string;
+  visual: SlideVisual;
+  image?: { src: string; alt: string; width: number; height: number };
+};
+
+export const sideCopy = {
+  left: "ANN DEVELOPMENT STACK",
+  right: "NK PORTFOLIO — 2026",
 };
 
 export const slides: Slide[] = [
   {
     id: "ring",
-    title: "REACT .",
+    stack: "STACK 01",
+    category: "FRONTEND",
+    title: "REACT.",
     subtitle: "REACT NATIVE",
+    meta: "(ST-01)",
+    tab: "01 REACT NATIVE",
+    visual: "rings",
     image: {
       src: "/images/slides/main_slider_01.png",
-      alt: "Wood grain cross section",
+      alt: "나이테 단면",
       width: 564,
       height: 752,
     },
-    labelInverse: ["ANN", "DEVELOPMENT", "STACK"],
-    label: ["2026", "PROJECT", "HISTORY"],
   },
   {
     id: "diamond",
-    title: "JAVA .",
+    stack: "STACK 02",
+    category: "BACKEND",
+    title: "JAVA.",
     subtitle: "JAVA SPRING",
+    meta: "(ST-02)",
+    tab: "02 JAVA SPRING",
+    visual: "rock",
     image: {
       src: "/images/slides/main_slider_02.png",
-      alt: "Rough stone",
+      alt: "돌 조각",
       width: 750,
       height: 1000,
     },
-    labelInverse: ["ANN", "DEVELOPMENT", "STACK"],
-    label: ["2026", "PROJECT", "HISTORY"],
   },
   {
     id: "pearl",
-    title: "SQL .",
+    stack: "STACK 03",
+    category: "DATABASE",
+    title: "SQL.",
     subtitle: "POSTGRESQL",
-    image: {
-      src: "/images/slides/main_slider_03.png",
-      alt: "Folded white form",
-      width: 580,
-      height: 870,
-    },
-    labelInverse: ["ANN", "DEVELOPMENT", "STACK"],
-    label: ["2026", "PROJECT", "HISTORY"],
+    meta: "(ST-03)",
+    tab: "03 POSTGRESQL",
+    visual: "ocean",
   },
 ];
