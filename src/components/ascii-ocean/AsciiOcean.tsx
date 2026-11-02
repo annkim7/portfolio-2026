@@ -94,6 +94,11 @@ export function AsciiOcean({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<OceanEngine | null>(null);
   const cfgRef = useRef<OceanConfig>(defaultConfig());
+  const pausedRef = useRef(paused);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
   const transparent = background === "transparent";
   const bg = transparent ? ([0, 0, 0] as [number, number, number]) : parseColor(background, [0, 0, 0]);
@@ -130,6 +135,7 @@ export function AsciiOcean({
       fishCount,
       cfgRef.current,
     );
+    engine.setRunning(!pausedRef.current);
     engineRef.current = engine;
     return () => {
       engine.destroy();
