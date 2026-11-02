@@ -95,7 +95,10 @@ export function AsciiOcean({
   const engineRef = useRef<OceanEngine | null>(null);
   const cfgRef = useRef<OceanConfig>(defaultConfig());
   const pausedRef = useRef(paused);
-  pausedRef.current = paused;
+
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
   const transparent = background === "transparent";
   const bg = transparent ? ([0, 0, 0] as [number, number, number]) : parseColor(background, [0, 0, 0]);
