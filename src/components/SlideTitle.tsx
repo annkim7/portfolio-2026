@@ -1,6 +1,7 @@
 "use client";
 
 import type { Slide } from "@/data/slides";
+import { TITLE_FADE_S } from "@/lib/motion";
 import { AnimatePresence, motion } from "motion/react";
 
 export function SlideTitle({ slide, reduced }: { slide: Slide; reduced: boolean }) {
@@ -13,7 +14,7 @@ export function SlideTitle({ slide, reduced }: { slide: Slide; reduced: boolean 
           initial={reduced ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reduced ? 0 : TITLE_FADE_S, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="l1">{slide.title}</span>
           <span className="l2">{slide.subtitle}</span>

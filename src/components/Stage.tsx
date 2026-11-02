@@ -11,6 +11,7 @@ import { slides } from "@/data/slides";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSlideNavigation } from "@/hooks/useSlideNavigation";
 import type { SiteLinks } from "@/lib/links";
+import { SLIDE_LOCK_MS } from "@/lib/motion";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -43,7 +44,7 @@ export function Stage({ links }: { links: SiteLinks }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const { index, goTo } = useSlideNavigation({
     count: slides.length,
-    duration: 450,
+    duration: SLIDE_LOCK_MS,
     ids: slides.map((slide) => slide.id),
     rootRef,
   });

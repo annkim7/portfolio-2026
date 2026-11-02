@@ -1,6 +1,7 @@
 "use client";
 
 import type { Slide } from "@/data/slides";
+import { OBJECT_FADE_S } from "@/lib/motion";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 
@@ -20,7 +21,7 @@ export function SlideObject({ slide, reduced, priority = false }: SlideObjectPro
           initial={reduced ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduced ? 0 : 0.4 }}
+          transition={{ duration: reduced ? 0 : OBJECT_FADE_S }}
         >
           {slide.visual === "ocean" || !slide.image ? null : (
             <div className={slide.visual === "rings" ? "still rings" : "still rock"}>
