@@ -71,7 +71,12 @@ export function Stage({ links }: { links: SiteLinks }) {
         <AdjacentSlides index={index} />
         <SlideObject slide={slide} reduced={reduced} priority={index === 0} />
         <SlideTitle slide={slide} reduced={reduced} />
-        <CreatureLayer active={slide.visual === "ocean"} />
+        <CreatureLayer
+          active={slide.visual === "ocean"}
+          preload={slides.some(
+            (item, itemIndex) => item.visual === "ocean" && Math.abs(itemIndex - index) === 1,
+          )}
+        />
         <div className="hero-frame">
           <span className="bracket tl" aria-hidden="true" />
           <span className="bracket tr" aria-hidden="true" />

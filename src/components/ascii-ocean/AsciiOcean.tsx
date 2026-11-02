@@ -72,7 +72,7 @@ export function AsciiOcean({
   sharkType = "classic",
   sharkCount = 4,
   sharkSize = 1,
-  fishCount = 180,
+  fishCount,
   fishType = "mixed",
   speed = 1,
   cellSize = 0,
