@@ -21,3 +21,9 @@
 | 2026-10-24 | feature-slide-copy | - | merged | 포트폴리오 문구, LinkedIn·GitHub 아이콘, 환경 변수 링크 |
 | 2026-10-25 | feature-remove-env-example | - | merged | .env.example의 실제 주소 삭제 |
 | 2026-11-02 | feature-update-r7-guide | - | noted | R7 가이드를 ASCII 바다 구현에 맞게 수정. 픽셀 고래와 핑크 점 배경은 사용하지 않음 |
+
+## PR #3 기록
+
+`feature/ascii-ocean`은 squash가 아닌 머지 커밋(`8bd84b1`)으로 `dev`에 들어갔고, 브랜치 이름에 슬래시를 썼다. `BRANCH_STRATEGY.md`는 `feature-<요약>`과 feature → dev squash를 유지한다. 이미 들어간 히스토리는 되돌리지 않는다.
+
+`b349ee1`에서 Phase 6–8의 패럴랙스, 마스크 전환, 랜딩 애니메이션이 프레임 재구성과 함께 빠졌다. R7이 단순한 페이드를 요구해서 방향은 같고, 당시 이 표에는 적히지 않았다.
