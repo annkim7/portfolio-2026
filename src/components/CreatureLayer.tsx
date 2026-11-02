@@ -4,7 +4,7 @@ import { AsciiOcean } from "@/components/ascii-ocean/AsciiOcean";
 import { useEffect, useState } from "react";
 
 export function CreatureLayer({ active }: { active: boolean }) {
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(!active);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setPaused(!active), active ? 0 : 300);

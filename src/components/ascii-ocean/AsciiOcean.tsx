@@ -143,8 +143,7 @@ export function AsciiOcean({
   }, [liveKey]);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => engineRef.current?.setRunning(!paused), paused ? 300 : 0);
-    return () => window.clearTimeout(timer);
+    engineRef.current?.setRunning(!paused);
   }, [paused]);
 
   return (
