@@ -16,11 +16,9 @@ type UseSlideNavigationOptions = {
 
 type UseSlideNavigationResult = {
   index: number;
-  direction: SlideDirection;
   goTo: (index: number) => void;
   next: () => void;
   prev: () => void;
-  isAnimating: boolean;
 };
 
 const WHEEL_THRESHOLD = 40;
@@ -45,8 +43,6 @@ export function useSlideNavigation({
   blocked = false,
 }: UseSlideNavigationOptions): UseSlideNavigationResult {
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState<SlideDirection>(1);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   const indexRef = useRef(0);
   const animatingRef = useRef(false);
@@ -71,14 +67,12 @@ export function useSlideNavigation({
   }, [onEdge]);
 
   const commit = useCallback(
-    (nextIndex: number, nextDirection: SlideDirection) => {
+    (nextIndex: number) => {
       if (animatingRef.current || nextIndex === indexRef.current) return;
 
       indexRef.current = nextIndex;
       animatingRef.current = true;
       setIndex(nextIndex);
-      setDirection(nextDirection);
-      setIsAnimating(true);
 
       const slideId = idsRef.current?.[nextIndex];
       if (slideId) {
@@ -90,7 +84,6 @@ export function useSlideNavigation({
 
       window.setTimeout(() => {
         animatingRef.current = false;
-        setIsAnimating(false);
       }, duration);
     },
     [duration],
@@ -103,14 +96,14 @@ export function useSlideNavigation({
       const target = indexRef.current + nextDirection;
       if (target < 0 || target >= count) {
         if (loop) {
-          commit((target + count) % count, nextDirection);
+          commit((target + count) % count);
           return;
         }
         onEdgeRef.current?.(nextDirection);
         return;
       }
 
-      commit(target, nextDirection);
+      commit(target);
     },
     [commit, count, loop],
   );
@@ -118,7 +111,7 @@ export function useSlideNavigation({
   const goTo = useCallback(
     (target: number) => {
       if (target < 0 || target >= count || target === indexRef.current) return;
-      commit(target, target > indexRef.current ? 1 : -1);
+      commit(target);
     },
     [commit, count],
   );
@@ -275,5 +268,5 @@ export function useSlideNavigation({
     };
   }, [blocked, count, go, goTo, next, prev]);
 
-  return { index, direction, goTo, next, prev, isAnimating };
+  return { index, goTo, next, prev };
 }

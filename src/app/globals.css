@@ -51,8 +51,6 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  --u: 1cqw;
-  --v: 1cqh;
   --edge: clamp(16px, 3.8cqw, 32px);
   --inset: clamp(24px, 11cqw, 96px);
   --nav-top: clamp(16px, 3.2cqh, 36px);
@@ -155,65 +153,9 @@ body {
   opacity: 0;
 }
 
-.creature-layer.is-paused .whale,
-.creature-layer.is-paused .whale img {
-  animation-play-state: paused;
-}
-
 .ocean-fill {
   width: 100%;
   height: 100%;
-}
-
-.whale {
-  position: absolute;
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
-
-.whale img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  image-rendering: pixelated;
-  animation: bob 3.4s ease-in-out infinite alternate;
-}
-
-.w1 {
-  width: calc(16.5 * var(--v));
-  aspect-ratio: 156 / 105;
-  animation: swimW1 calc(28s * var(--u) / 6.3px) linear calc(-7s * var(--u) / 6.3px) infinite;
-}
-
-.w2 {
-  width: calc(12 * var(--v));
-  aspect-ratio: 113 / 267;
-  animation: swimW2 calc(34s * var(--u) / 6.3px) linear calc(-15s * var(--u) / 6.3px) infinite;
-}
-
-.w3 {
-  width: calc(12.4 * var(--v));
-  aspect-ratio: 117 / 180;
-  animation: swimW3 calc(31s * var(--u) / 6.3px) linear calc(-5s * var(--u) / 6.3px) infinite;
-}
-
-.w4 {
-  width: calc(20.8 * var(--v));
-  aspect-ratio: 197 / 129;
-  animation: swimW4 calc(25s * var(--u) / 6.3px) linear calc(-11s * var(--u) / 6.3px) infinite;
-}
-
-.w2 img {
-  animation-delay: -1.2s;
-}
-
-.w3 img {
-  animation-delay: -2.1s;
-}
-
-.w4 img {
-  animation-delay: -0.6s;
 }
 
 .hero-frame {
@@ -496,51 +438,6 @@ body {
   }
 }
 
-@keyframes bob {
-  from {
-    transform: translateY(-6px) rotate(-1.5deg);
-  }
-  to {
-    transform: translateY(6px) rotate(1.5deg);
-  }
-}
-
-@keyframes swimW1 {
-  from {
-    transform: translate(calc(108 * var(--u)), calc(25 * var(--v)));
-  }
-  to {
-    transform: translate(calc(-35 * var(--u)), calc(18 * var(--v)));
-  }
-}
-
-@keyframes swimW2 {
-  from {
-    transform: translate(calc(68 * var(--u)), calc(-32 * var(--v)));
-  }
-  to {
-    transform: translate(calc(75.5 * var(--u)), calc(104 * var(--v)));
-  }
-}
-
-@keyframes swimW3 {
-  from {
-    transform: translate(calc(89 * var(--u)), calc(104 * var(--v)));
-  }
-  to {
-    transform: translate(calc(-28.5 * var(--u)), calc(-23 * var(--v)));
-  }
-}
-
-@keyframes swimW4 {
-  from {
-    transform: translate(calc(-38 * var(--u)), calc(63.5 * var(--v)));
-  }
-  to {
-    transform: translate(calc(108 * var(--u)), calc(69 * var(--v)));
-  }
-}
-
 @media (width <= 480px) {
   .nav-desktop,
   .tab-rest {
@@ -562,27 +459,9 @@ body {
   .hero-title,
   .dot-label,
   .still-img,
-  .whale,
-  .whale img,
   .creature-layer {
     animation: none !important;
     transition: none !important;
-  }
-
-  .w1 {
-    transform: translate(calc(27.3 * var(--u)), calc(17.67 * var(--v)));
-  }
-
-  .w2 {
-    transform: translate(calc(72.86 * var(--u)), calc(28.15 * var(--v)));
-  }
-
-  .w3 {
-    transform: translate(calc(10.63 * var(--u)), calc(51.11 * var(--v)));
-  }
-
-  .w4 {
-    transform: translate(calc(19.05 * var(--u)), calc(69.31 * var(--v)));
   }
 }
 

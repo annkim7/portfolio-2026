@@ -1,19 +1,20 @@
 "use client";
 
 import { AsciiOcean } from "@/components/ascii-ocean/AsciiOcean";
+import { OCEAN_FADE_MS } from "@/lib/motion";
 import { useEffect, useState } from "react";
 
 export function CreatureLayer({ active }: { active: boolean }) {
   const [paused, setPaused] = useState(!active);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setPaused(!active), active ? 0 : 300);
+    const timer = window.setTimeout(() => setPaused(!active), active ? 0 : OCEAN_FADE_MS);
     return () => window.clearTimeout(timer);
   }, [active]);
 
   return (
     <div
-      className={`creature-layer${active ? "" : " is-hidden"}${paused ? " is-paused" : ""}`}
+      className={`creature-layer${active ? "" : " is-hidden"}`}
       aria-hidden="true"
     >
       <AsciiOcean
